@@ -20,6 +20,22 @@ vendor_info = VendorDescriptor(
     device_query_cmd="rocm-smi",
 )
 
+"""
+Mapping from the major version torch reports for an AMD GPU to the directory
+holding that architecture's specialized configuration.
+
+Only the major version is matched, so an entry covers a whole gfx family rather
+than a single target. An architecture absent from the map falls back to the
+vendor-wide configuration.
+
+Example:
+  gfx1200, gfx1201 (RDNA4) -> major 12 -> rdna4
+"""
+
+ARCH_MAP = {
+    "12": "rdna4",
+}
+
 CUSTOMIZED_UNUSED_OPS = (
     "add",
     "cos",
