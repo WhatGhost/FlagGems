@@ -21,19 +21,22 @@ vendor_info = VendorDescriptor(
 )
 
 """
-Mapping from the major version torch reports for an AMD GPU to the directory
-holding that architecture's specialized configuration.
+Mapping from an AMD GPU architecture to the directory holding that
+architecture's specialized configuration.
 
-Only the major version is matched, so an entry covers a whole gfx family rather
-than a single target. An architecture absent from the map falls back to the
-vendor-wide configuration.
+Keys are looked up from the most to the least specific: the exact target torch
+reports in gcnArchName, then "major.minor", then the major version alone. An
+architecture absent from the map falls back to the vendor-wide configuration.
 
-Example:
-  gfx1200, gfx1201 (RDNA4) -> major 12 -> rdna4
+Targets are listed individually because the major version alone is too coarse:
+gfx1250 and gfx1251 also report major 12, yet they form the separate GFX12.5
+family (LLVM keeps them out of gfx12-generic) with a much larger addressable
+LDS, so the RDNA4 candidates would be a poor fit for them.
 """
 
 ARCH_MAP = {
-    "12": "rdna4",
+    "gfx1200": "rdna4",
+    "gfx1201": "rdna4",
 }
 
 CUSTOMIZED_UNUSED_OPS = (

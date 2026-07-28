@@ -12,10 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Autotune candidates for the gfx12 family (RDNA4). Ops listed here replace the
-# vendor-wide list in _amd/tune_configs.yaml; anything absent falls back to it
-# unchanged. Arch selection matches on the major version alone, so these apply
-# to every gfx12 target even though they were measured only on gfx1201.
+# Autotune candidates for RDNA4, that is gfx1200 and gfx1201, measured on
+# gfx1201. Ops listed here replace the vendor-wide list in
+# _amd/tune_configs.yaml; anything absent falls back to it unchanged.
+# _amd/__init__.py maps those two targets by name, so the GFX12.5 parts that
+# report the same major version do not read this file.
 #
 # The candidates come from an exhaustive sweep of the tile/warp/stage space:
 # every configuration that won at least one benchmarked shape, plus a few
