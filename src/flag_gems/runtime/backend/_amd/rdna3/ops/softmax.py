@@ -59,22 +59,22 @@ _BLOCKS_PER_CU = 4
 # CUs by itself, and splitting past that point only buys a second launch. Narrow
 # elements stay ahead of the generic kernel with twice as many rows in flight, so
 # they get the looser row budget, paired with the shortest row at which that row
-# count turns positive. Wider elements finish within a few percent of the generic
-# kernel at that row count whatever the length, so they take the tighter row
-# budget and, with it, a shorter minimum row.
+# count turns positive. Wider elements only track the generic kernel at that row
+# count whatever the length, so they take the tighter row budget and, with it, a
+# shorter minimum row.
 #
 # Both CU figures are deliberately separate from _BLOCKS_PER_CU: that one sets how
 # many blocks to aim for, these decide which shapes are eligible at all.
 #
 # The row budgets were measured on gfx1100 by sweeping row counts against row
-# lengths with the eligibility checks bypassed. Split stays ahead of the generic
-# kernel up to 16 rows for narrow elements and 8 for wide ones; past that it can
+# lengths with the eligibility checks bypassed: split stays ahead of the generic
+# kernel up to a row count that depends on element width, and past that it can
 # lose. The binding constraint is not the longest rows but the shortest eligible
 # ones: the generic kernel's tile choice makes its cost a step function of N, and
-# just past the minimum length above it sits on a favourable step, so a cap
-# chosen at 1M rows would give away a few percent around 52K-57K (narrow) and
-# 40K-45K (wide). Note that HIP reports WGPs here rather than CUs, so a 96-CU
-# part gives cu = 48 and these divisors yield 16 and 8.
+# just past the minimum length above it sits on a favourable step, so a budget
+# chosen from the longest rows alone would give ground just above the minimum.
+# Note that HIP reports WGPs here rather than CUs, so cu is half the CU count the
+# part is marketed with, and these divisors are set accordingly.
 _NARROW_MAX_ITEMSIZE = 2
 _NARROW_MIN_SPLIT_N = 48 * 1024
 _NARROW_MIN_CUS_PER_ROW = 3
